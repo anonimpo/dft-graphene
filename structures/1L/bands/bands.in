@@ -1,0 +1,5 @@
+&BANDS
+  outdir = '/run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/tmp/'
+  prefix = 'gr-1L'
+  filband = 'gr-1L.bands'
+/

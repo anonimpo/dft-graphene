@@ -1,0 +1,5 @@
+&BANDS
+  outdir = '../../../../tmp/' 
+  prefix = 'gr-ab-3L'
+  filband = 'gr-ab-3L.bands'
+/

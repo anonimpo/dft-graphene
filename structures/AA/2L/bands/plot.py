@@ -5,10 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    plt.style.use("../../../matplotlib/sci.mplstyle")
-except:
-    pass
+plt.style.use("../../../matplotlib/sci.mplstyle")
 
 
 def plot_band_structure():
@@ -33,9 +30,9 @@ def plot_band_structure():
     # Set high-symmetry points
     n_points = len(k)
     gG1 = k[0]
-    K_idx = min(40, n_points - 1)  # Adjust based on your specific k-path
-    M_idx = min(60, n_points - 1)  # Adjust based on your specific k-path
-    gG2_idx = min(90, n_points - 1)  # Adjust based on your specific k-path
+    K_idx = min(40, n_points - 1)
+    M_idx = min(60, n_points - 1)
+    gG2_idx = min(90, n_points - 1)
 
     K = k[K_idx]
     M = k[M_idx]
@@ -54,7 +51,7 @@ def plot_band_structure():
     plt.axvline(M, c="gray", ls="--", alpha=0.5, linewidth=0.8)
 
     plt.xlim(gG1, gG2)
-    plt.ylim(-20, 20)  # Adjust the energy range as needed
+    plt.ylim(-20, 20)  # Adjust the energy range
     plt.xlabel("Wave Vector")
     plt.ylabel("Energy (eV)")
     plt.title("AA-stacked Bilayer Graphene Band Structure")
@@ -66,7 +63,7 @@ def plot_band_structure():
     plt.grid(alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("plot-bands.pdf", dpi=300)
+    plt.savefig(".reference/plot-bands.pdf", dpi=300)
     print("Band structure plot saved as plot-bands.pdf")
 
 

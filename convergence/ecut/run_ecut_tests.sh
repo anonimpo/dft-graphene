@@ -37,7 +37,7 @@ mkdir -p "$test_dir/results"
 
 # Values of ecutwfc to test
 #ecut_values=(30 40 50 60 70 80)
-if [ -n "$custom_ecut" ]; then]
+if [ -n "$custom_ecut" ]; then
   ecut_values=($custom_ecut)
 else
     ecut_values=(20 22 24 26 30 35 40 45 50 55 60 65 70 75 80)

@@ -1,7 +1,7 @@
 &CONTROL
 calculation   = 'scf'
-pseudo_dir = '../../../pseudo/'
-outdir = '../../../tmp/'
+pseudo_dir    = '../../../pseudo/'
+outdir        = '../../../tmp/'
 prefix        = 'gr-1L'
 /
 &SYSTEM

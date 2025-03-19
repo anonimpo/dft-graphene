@@ -2,12 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Try to use the custom style if available, otherwise use default
-try:
-    plt.style.use("../../../matplotlib/sci.mplstyle")
-except:
-    # Use default style if the custom style is not found
-    pass
+plt.style.use("../../../matplotlib/sci.mplstyle")
 
 # read fermi-energy.txt
 try:
@@ -78,6 +73,3 @@ plt.tick_params(axis="x", which="minor", bottom=False, top=False)
 plt.title("Monolayer Graphene Band Structure")
 # Save figure to the pdf file
 plt.savefig("./reference/plot-bands.pdf")
-# Show figure
-plt.show()
-

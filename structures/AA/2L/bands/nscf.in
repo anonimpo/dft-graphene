@@ -1,7 +1,7 @@
 &CONTROL
 calculation   = 'bands'
-pseudo_dir    = '../../../../pseudo/'
-outdir        = '../../../../tmp/'
+pseudo_dir    = '/home/rfa/Skripsi/DFT/dft-graphene/pseudo'
+outdir        = '/home/rfa/Skripsi/DFT/dft-graphene/tmp'
 prefix        = 'gr-aa-2L'
 /
 &SYSTEM
@@ -15,21 +15,22 @@ occupations   = 'smearing'
 smearing      = 'mv'
 degauss       = 0.020
 ecutwfc       = 60  ! Use converged value from tests
+ecutrho       = 300
 /
 &ELECTRONS
 mixing_beta   = 0.7
-conv_thr      = 1.0D-6
+conv_thr      = 1.0D-8
 /
 ATOMIC_SPECIES
 C 12.0107 C.pbe-n-rrkjus_psl.0.1.UPF
 ATOMIC_POSITIONS (crystal)
-C                0.3333333330        0.6666666660        0.4823607596
-C                0.6666666660        0.3333333330        0.4823607596
-C                0.3333333330        0.6666666660        0.5509725734
-C                0.6666666660        0.3333333330        0.5509725734
+C  0.333333333  0.666666666  0.500000000  ! First layer
+C  0.666666666  0.333333333  0.500000000  ! First layer
+C  0.333333333  0.666666666  0.533333333  ! Second layer (AA stacking)
+C  0.666666666  0.333333333  0.533333333  ! Second layer (AA stacking)
 K_POINTS (crystal_b)
 4
-gG 40
-K  20
-M  30
+gG 40       !gamma to gamma
+K  20       !K to gamma
+M  30       !m to gamma
 gG 0

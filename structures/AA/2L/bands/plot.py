@@ -5,7 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-plt.style.use("../../../matplotlib/sci.mplstyle")
+plt.style.use("../../../../matplotlib/sci.mplstyle")
 
 
 def plot_band_structure():
@@ -28,15 +28,18 @@ def plot_band_structure():
     bands = np.reshape(data[:, 1], (-1, len(k)))
 
     # Set high-symmetry points
-    n_points = len(k)
+    # n_points = len(k)
     gG1 = k[0]
-    K_idx = min(40, n_points - 1)
-    M_idx = min(60, n_points - 1)
-    gG2_idx = min(90, n_points - 1)
+    K = k[40]
+    M = k[60]
+    gG2 = k[90]
+    # K_idx = min(40, n_points - 1)
+    # M_idx = min(60, n_points - 1)
+    # gG2_idx = min(90, n_points - 1)
 
-    K = k[K_idx]
-    M = k[M_idx]
-    gG2 = k[gG2_idx]
+    # K = k[K_idx]
+    # M = k[M_idx]
+    # gG2 = k[gG2_idx]
 
     # Create plot
     plt.figure(figsize=(8, 6))
@@ -63,8 +66,9 @@ def plot_band_structure():
     plt.grid(alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(".reference/plot-bands.pdf", dpi=300)
+    plt.savefig("./reference/plot-bands.pdf", dpi=300)
     print("Band structure plot saved as plot-bands.pdf")
+    plt.show()
 
 
 if __name__ == "__main__":

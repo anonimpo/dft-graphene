@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.4.1 starts on 19Mar2025 at  4:56:34 
+     Program PWSCF v.7.4.1 starts on 24Mar2025 at  8:33:19 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on     7 processors
 
      MPI processes distributed on     1 nodes
-     2660 MiB available memory on the printing compute node when the environment starts
+     9518 MiB available memory on the printing compute node when the environment starts
 
      Waiting for input...
      Reading input from standard input
@@ -24,7 +24,7 @@
      Max angular momentum in pseudopotentials (lmaxx) =  4
 
      Atomic positions and unit cell read from directory:
-     /run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/tmp/gr-1L.save/
+     ../../../tmp/gr-1L.save/
 
 
      R & G space division:  proc/nbgrp/npool/nimage =       7
@@ -70,7 +70,7 @@
 
 
      PseudoPot. # 1 for C  read from file:
-     /run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/pseudo/C.pbe-n-rrkjus_psl.0.1.UPF
+     ../../../pseudo/C.pbe-n-rrkjus_psl.0.1.UPF
      MD5 check sum: 96a6a315177d77e6c95bf6fd3870f9e3
      Pseudo is Ultrasoft + core correction, Zval =  4.0
      Generated using &quot;atomic&quot; code by A. Dal Corso  v.6.3MaX
@@ -198,7 +198,7 @@
      Check: negative core charge=   -0.000003
 
      The potential is recalculated from file :
-     /run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/tmp/gr-1L.save/charge-density
+     ../../../tmp/gr-1L.save/charge-density
 
 
      negative rho (up, down):  1.269E-04 0.000E+00
@@ -240,7 +240,7 @@
 
      ethr =  1.25E-08,  avg # of iterations =105.8
 
-     total cpu time spent up to now is       32.0 secs
+     total cpu time spent up to now is       25.7 secs
 
      End of band structure calculation
 
@@ -608,49 +608,49 @@
 
    -21.2386  -9.3433  -4.7783  -4.7783   1.4133   2.2338   2.4900   4.4647
 
-     Writing all to output data dir /run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/tmp/gr-1L.save/ :
+     Writing all to output data dir ../../../tmp/gr-1L.save/ :
      XML data file, pseudopotentials, collected wavefunctions
 
-     init_run     :      0.34s CPU      0.66s WALL (       1 calls)
-     electrons    :     54.24s CPU     31.26s WALL (       1 calls)
+     init_run     :      0.37s CPU      0.71s WALL (       1 calls)
+     electrons    :     45.90s CPU     24.94s WALL (       1 calls)
 
      Called by init_run:
      wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
-     potinit      :      0.01s CPU      0.01s WALL (       1 calls)
-     hinit0       :      0.31s CPU      0.61s WALL (       1 calls)
+     potinit      :      0.00s CPU      0.01s WALL (       1 calls)
+     hinit0       :      0.34s CPU      0.67s WALL (       1 calls)
 
      Called by electrons:
-     c_bands      :     54.24s CPU     31.26s WALL (       1 calls)
-     v_of_rho     :      0.01s CPU      0.01s WALL (       1 calls)
-     newd         :      0.01s CPU      0.01s WALL (       1 calls)
+     c_bands      :     45.89s CPU     24.94s WALL (       1 calls)
+     v_of_rho     :      0.00s CPU      0.01s WALL (       1 calls)
+     newd         :      0.00s CPU      0.01s WALL (       1 calls)
 
      Called by c_bands:
-     init_us_2    :      0.03s CPU      0.02s WALL (      91 calls)
-     cegterg      :     53.54s CPU     30.84s WALL (     511 calls)
+     init_us_2    :      0.03s CPU      0.01s WALL (      91 calls)
+     cegterg      :     45.33s CPU     24.62s WALL (     511 calls)
 
      Called by *egterg:
-     cdiaghg      :      2.70s CPU      1.54s WALL (    9719 calls)
-     h_psi        :     42.42s CPU     24.48s WALL (   10230 calls)
-     s_psi        :      0.63s CPU      0.37s WALL (   10230 calls)
-     g_psi        :      0.55s CPU      0.29s WALL (    9628 calls)
+     cdiaghg      :      2.39s CPU      1.22s WALL (    9719 calls)
+     h_psi        :     37.08s CPU     20.33s WALL (   10230 calls)
+     s_psi        :      0.50s CPU      0.27s WALL (   10230 calls)
+     g_psi        :      0.53s CPU      0.27s WALL (    9628 calls)
 
      Called by h_psi:
-     h_psi:calbec :      3.40s CPU      2.02s WALL (   10230 calls)
-     vloc_psi     :     37.57s CPU     21.57s WALL (   10230 calls)
-     add_vuspsi   :      1.05s CPU      0.63s WALL (   10230 calls)
+     h_psi:calbec :      1.45s CPU      0.80s WALL (   10230 calls)
+     vloc_psi     :     34.68s CPU     18.98s WALL (   10230 calls)
+     add_vuspsi   :      0.65s CPU      0.34s WALL (   10230 calls)
 
      General routines
-     calbec       :      3.31s CPU      1.95s WALL (   10230 calls)
-     fft          :      0.30s CPU      0.60s WALL (      12 calls)
-     fftw         :     32.60s CPU     18.74s WALL (  127980 calls)
-     davcio       :      0.02s CPU      0.02s WALL (     182 calls)
+     calbec       :      1.39s CPU      0.75s WALL (   10230 calls)
+     fft          :      0.32s CPU      0.66s WALL (      12 calls)
+     fftw         :     30.74s CPU     16.85s WALL (  127980 calls)
+     davcio       :      0.02s CPU      0.01s WALL (     182 calls)
 
      Parallel routines
 
-     PWSCF        :     54.71s CPU     32.12s WALL
+     PWSCF        :     46.38s CPU     25.84s WALL
 
 
-   This run was terminated on:   4:57: 6  19Mar2025            
+   This run was terminated on:   8:33:45  24Mar2025            
 
 =------------------------------------------------------------------------------=
    JOB DONE.

@@ -1,7 +1,7 @@
 &CONTROL
 calculation   = 'scf'
-pseudo_dir    = '../../../../pseudo/'
-outdir        = '../../../../tmp/'
+pseudo_dir    = '/home/rfa/Skripsi/DFT/dft-graphene/pseudo'
+outdir        = '/home/rfa/Skripsi/DFT/dft-graphene/tmp'
 prefix        = 'gr-aa-4L'
 /
 &SYSTEM

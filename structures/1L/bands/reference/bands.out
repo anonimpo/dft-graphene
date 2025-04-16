@@ -1,5 +1,5 @@
 
-     Program BANDS v.7.4.1 starts on 19Mar2025 at  4:57: 7 
+     Program BANDS v.7.4.1 starts on 24Mar2025 at  8:33:46 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -14,12 +14,12 @@
 
      MPI processes distributed on     1 nodes
      R & G space division:  proc/nbgrp/npool/nimage =       7
-     2406 MiB available memory on the printing compute node when the environment starts
+     9415 MiB available memory on the printing compute node when the environment starts
 
 
      Reading xml data from directory:
 
-     /run/media/rfa/SATA/Skripsi/DFT/Graphene-copy/tmp/gr-1L.save/
+     ../../../tmp/gr-1L.save/
 
      IMPORTANT: XC functional enforced from input :
      Exchange-correlation= PBE
@@ -1805,16 +1805,14 @@ E_2u   2.00 -1.00 -1.00  2.00  0.00  0.00 -2.00  1.00  1.00 -2.00  0.00  0.00
 
  **************************************************************************
 
-     BANDS        :      8.26s CPU      7.17s WALL
+     BANDS        :      5.92s CPU      4.84s WALL
 
 
-   This run was terminated on:   4:57:14  19Mar2025            
+   This run was terminated on:   8:33:51  24Mar2025            
 
 =------------------------------------------------------------------------------=
    JOB DONE.
 =------------------------------------------------------------------------------=
-Note: The following floating-point exceptions are signalling: IEEE_DENORMAL
-Note: The following floating-point exceptions are signalling: IEEE_DENORMAL
 Note: The following floating-point exceptions are signalling: IEEE_DENORMAL
 Note: The following floating-point exceptions are signalling: IEEE_DENORMAL
 Note: The following floating-point exceptions are signalling: IEEE_DENORMAL

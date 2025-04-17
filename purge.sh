@@ -18,7 +18,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
   echo "  --help      Show this help message"
   echo ""
   echo "This script will clean all calculation outputs."
-  echo "IMPORTANT: Run ./save_results.sh first to backup important files!"
+# echo "IMPORTANT: Run ./save_results.sh first to backup important files!"
   exit 0
 fi
 
@@ -43,13 +43,14 @@ done
 # Check if saved_results directory exists, if not issue a warning
 if [ ! -d "saved_results" ] && [ $dry_run -eq 0 ]; then
   echo "WARNING: 'saved_results' directory not found!"
-  echo "It is recommended to run ./save_results.sh before purging to backup important files."
+# echo "It is recommended to run ./save_results.sh before purging to backup important files." 
   echo ""
   
   if [ $force -eq 0 ]; then
     read -p "Continue without backing up? (y/n): " continue_without_backup
     if [[ "$continue_without_backup" != "y" && "$continue_without_backup" != "Y" ]]; then
-      echo "Purge aborted. Please run ./save_results.sh first."
+      echo "Purge aborted"
+  #   echo "Purge aborted. Please run ./save_results.sh first."
       exit 0
     fi
   fi
@@ -108,4 +109,4 @@ done
 find convergence structures tmp logs -type d -empty -delete 2>/dev/null
 
 echo "Purge completed successfully."
-echo "Important results have been preserved in the 'saved_results' directory."
+#echo "Important results have been preserved in the 'saved_results' directory."

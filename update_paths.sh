@@ -24,38 +24,48 @@ update_file() {
   local base_name=$(basename "$file")
   echo "  Updating $base_name..."
   
-  # Replace absolute paths with the current directory
-  sed -i "s|pseudo_dir\s*=\s*['\"].*['\"]|pseudo_dir = '$CURRENT_DIR/pseudo/'|g" "$file"
-  sed -i "s|pseudo_dir\s*=\s*[^ ,]*/pseudo/|pseudo_dir = '$CURRENT_DIR/pseudo/'|g" "$file"
-  
-  sed -i "s|outdir\s*=\s*['\"].*['\"]|outdir = '$CURRENT_DIR/tmp/'|g" "$file"
-  sed -i "s|outdir\s*=\s*[^ ,]*/tmp/\?|outdir = '$CURRENT_DIR/tmp/'|g" "$file"
-  
-  # Also handle the bands.in files specifically
-  if [ "$base_name" = "bands.in" ]; then
-    sed -i "s|outdir\s*=\s*.*$|outdir = '$CURRENT_DIR/tmp/'|g" "$file"
-  fi
+  # Replace the entire line containing pseudo_dir or outdir
+  # This is more robust than trying to match specific path formats
+  sed -i "s|^.*pseudo_dir.*$|  pseudo_dir    = '$CURRENT_DIR/pseudo'|" "$file"
+  sed -i "s|^.*outdir.*$|  outdir        = '$CURRENT_DIR/tmp'|" "$file"
 }
 
+# Define the path for the temporary file list within the project's tmp directory
+TMP_FILE_LIST="$CURRENT_DIR/tmp/graphene_files.list"
+
 # Create a temporary list of files to process
-find "$CURRENT_DIR" -type f -name "*.in" > /tmp/graphene_files.txt
+echo "Creating temporary file list at $TMP_FILE_LIST..."
+find "$CURRENT_DIR" -type f -name "*.in" > "$TMP_FILE_LIST"
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to create temporary file list at $TMP_FILE_LIST."
+    echo "Please check permissions for the directory $CURRENT_DIR/tmp/"
+    exit 1
+fi
+
 
 # Process files in batches to show progress
-TOTAL=$(cat /tmp/graphene_files.txt | wc -l)
+TOTAL=$(cat "$TMP_FILE_LIST" | wc -l)
 COUNTER=0
 
 echo "Updating paths in input files..."
 while IFS= read -r file; do
   update_file "$file"
   COUNTER=$((COUNTER + 1))
-  PERCENTAGE=$((COUNTER * 100 / TOTAL))
-  echo -ne "  Progress: $PERCENTAGE% ($COUNTER/$TOTAL)\r"
-done < /tmp/graphene_files.txt
+  # Avoid division by zero if TOTAL is 0
+  if [ "$TOTAL" -gt 0 ]; then
+    PERCENTAGE=$((COUNTER * 100 / TOTAL))
+    echo -ne "  Progress: $PERCENTAGE% ($COUNTER/$TOTAL)\r"
+  else
+    echo -ne "  Progress: 0% (0/0)\r"
+  fi
+done < "$TMP_FILE_LIST"
+
+# Clean up the temporary file
+rm "$TMP_FILE_LIST"
 
 echo -e "\nAll input files updated successfully!"
 echo ""
 echo "Path information:"
 echo "- Pseudopotential directory: $CURRENT_DIR/pseudo/"
 echo "- Temporary files directory: $CURRENT_DIR/tmp/"
-echo ""
-echo "You can now run calculations with the corrected paths."
+#hourspend=3

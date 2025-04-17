@@ -81,7 +81,7 @@ list_purgeable_files() {
   find tmp -type f
   
   # Log files
-  find logs -type f
+  # find logs -type f
 }
 
 # Count files to be purged
@@ -106,7 +106,7 @@ for file in $purgeable_files; do
 done
 
 # Clean empty directories
-find convergence structures tmp logs -type d -empty -delete 2>/dev/null
+find convergence structures tmp -type d -empty -delete 2>/dev/null
 
 echo "Purge completed successfully."
 #echo "Important results have been preserved in the 'saved_results' directory."

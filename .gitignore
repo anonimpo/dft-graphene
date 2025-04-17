@@ -1,0 +1,8 @@
+# Python virtual environment
+venv-dft/
+
+# Temporary files
+tmp/
+
+# CLAUDE.md guidance file
+CLAUDE.md

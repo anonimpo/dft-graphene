@@ -1,26 +1,40 @@
 #!/usr/bin/env python3
 
+import argparse
+import os
 import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot_kpoints_convergence(stacking, layers):
+def plot_kpoints_convergence(stacking, layers, show_plot=False):
     """
-    Plot the energy vs. k-point grid convergence data.
+    Plots k-point grid convergence data, determines optimal grid size,
+    saves the plot, and optionally displays it.
 
     Args:
-        stacking (str): Stacking type (AA, AB, ABC, 1L)
-        layers (int): Number of layers
+        stacking (str): Stacking type ('AA', 'AB', 'ABC', or '1L').
+        layers (int): Number of layers (relevant for 'AA', 'AB', 'ABC').
+        show_plot (bool, optional): Display plot interactively,/
+            triggered by --show.
     """
-    # File to read data from - handle special case for monolayer
-    if stacking == "1L":
-        data_file = f"1L/results/kpoints_vs_energy.dat"
-        title_prefix = "Monolayer"
-    else:
-        data_file = f"{stacking}/{layers}L/results/kpoints_vs_energy.dat"
-        title_prefix = f"{stacking}-stacked {layers}L"
+    # Determine base directory and title prefix based on stacking/layers
+    base_dir = (
+        "1L" if stacking == "1L" else os.path.join(stacking, f"{layers}L")
+    )
+    title_prefix = (
+        "Monolayer" if stacking == "1L" else f"{stacking}-stacked {layers}L"
+    )
+    results_dir = os.path.join(base_dir, "results")
+    data_file = os.path.join(results_dir, "kpoints_vs_energy.dat")
+    output_file = os.path.join(
+        results_dir, f"kpoints_convergence_{stacking}_{layers}L.png"
+    )
+    optimal_kpoints_file = os.path.join(results_dir, "optimal_kpoints.dat")
+
+    # Ensure results directory exists
+    os.makedirs(results_dir, exist_ok=True)
 
     try:
         # Attempt to read data with flexible handling for inconsistent columns
@@ -33,7 +47,8 @@ def plot_kpoints_convergence(stacking, layers):
             # If error occurs due to inconsistent columns
             if "the number of columns changed" in str(e):
                 print(
-                    "Warning: Inconsistent columns detected in data file. Attempting to fix..."
+                    "Warning: Inconsistent columns detected in \
+                    data file. Attempting to fix..."
                 )
 
                 # Read the file as text and process line by line
@@ -88,44 +103,115 @@ def plot_kpoints_convergence(stacking, layers):
         ax2.set_yscale("log")
 
         # Add threshold line for convergence criterion (e.g., 1 meV ~ 0.000073 Ry)
-        threshold = 0.000073  # 1 meV in Ry
+        threshold = 0.001  # 1 meV in Ry
         ax2.axhline(
             y=threshold, color="green", linestyle="--", label="1 meV threshold"
         )
         ax2.legend()
 
-        plt.tight_layout()
-        # Use appropriate filename for monolayer vs. multilayer
-        if stacking == "1L":
-            output_file = "./1L/results/1L_kpoints_convergence.pdf"
+        # Determine optimal k-point grid size
+        converged_indices = np.where(energy_diffs <= threshold)[0]
+        if len(converged_indices) > 0:
+            # Find the first index where convergence is met
+            first_converged_index = converged_indices[0]
+            optimal_kpoint_value = kpoint_values[first_converged_index]
+            optimal_diff = energy_diffs[first_converged_index]
+
+            # Add text annotation for optimal k-point grid
+            ax2.text(
+                0.95,
+                0.95,
+                f"Optimal K-grid ≈ {int(optimal_kpoint_value)}x{int(optimal_kpoint_value)}x1\n(diff ≈ {optimal_diff:.2e} Ry)",
+                transform=ax2.transAxes,
+                fontsize=9,
+                verticalalignment="top",
+                horizontalalignment="right",
+                bbox=dict(boxstyle="round,pad=0.3", fc="wheat", alpha=0.5),
+            )
+
+            # Save the optimal k-point value (integer part)
+            try:
+                with open(optimal_kpoints_file, "w") as f:
+                    f.write(
+                        f"# Optimal K-point grid size (n) where convergence\n"
+                        f"# first meets the threshold of {threshold} Ry\n"
+                    )
+                    f.write(f"{int(optimal_kpoint_value)}\n")
+                print(
+                    f"Optimal k-point grid size saved to {optimal_kpoints_file}"
+                )
+            except IOError as e:
+                print(f"Warning: Could not write optimal k-point file: {e}")
         else:
-            output_file = f"./{stacking}/{layers}L/results/{stacking}_{layers}L_kpoints_convergence.pdf"
+            print(
+                "Warning: Convergence threshold not met for any k-point grid size."
+            )
+
+        plt.tight_layout()
         plt.savefig(output_file)
-        print(f"Plot saved as {output_file}")
-        plt.show()
+        print(f"Plot saved to {output_file}")
+
+        if show_plot:
+            plt.show()
+        else:
+            plt.close(fig)  # Close the figure if not showing interactively
 
     except FileNotFoundError:
-        print(f"Error: Data file {data_file} not found.")
+        print(f"Error: Data file not found at {data_file}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"An error occurred during plotting: {e}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    # Check if the correct arguments are provided
-    if len(sys.argv) == 1:
-        # Default to monolayer if no arguments provided
-        print("No arguments provided, defaulting to monolayer graphene")
-        stacking = "1L"
-        layers = 1
-    elif len(sys.argv) == 3:
-        stacking = sys.argv[1]  # 1L, AA, AB, or ABC
-        layers = int(sys.argv[2])  # 1, 2, 3, or 4
-    else:
-        print("Usage: python plot_kpoints.py <stacking_type> <num_layers>")
-        print("Examples:")
-        print("  python plot_kpoints.py          # Plot monolayer (default)")
-        print("  python plot_kpoints.py 1L 1     # Plot monolayer")
-        print("  python plot_kpoints.py AA 2     # Plot AA-stacked bilayer")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Plot k-point convergence for graphene calculations.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
-    plot_kpoints_convergence(stacking, layers)
+    parser.add_argument(
+        "stacking",
+        nargs="?",
+        default="1L",
+        choices=["1L", "AA", "AB", "ABC"],
+        help="Stacking type (default: 1L).",
+    )
+    parser.add_argument(
+        "layers",
+        nargs="?",
+        type=int,
+        default=1,
+        help="Number of layers (required if stacking is not 1L, default: 1).",
+    )
+    parser.add_argument(
+        "--show",
+        action="store_true",
+        help="Display the plot interactively.",
+    )
 
+    args = parser.parse_args()
+
+    # Validate arguments
+    if args.stacking == "1L":
+        if args.layers != 1:
+            print(
+                "Warning: For stacking '1L',\
+                layers is automatically set to 1."
+            )
+        args.layers = 1  # Ensure layers is 1 for monolayer
+    elif args.layers <= 0:
+        parser.error("Number of layers must be a positive integer.")
+    elif args.stacking != "1L" and args.layers < 2:
+        # Allow single layer specification even for AA/AB/ABC for flexibility, but warn
+        print(
+            f"Warning: Stacking type {args.stacking} usually implies >= 2 \
+            layers, but {args.layers} was specified."
+        )
+
+    print(
+        f"Processing: Stacking={args.stacking},\
+        Layers={args.layers}, Show Plot={args.show}"
+    )
+    plot_kpoints_convergence(args.stacking, args.layers, show_plot=args.show)
+# hour-spend=1/2 copy from ecut

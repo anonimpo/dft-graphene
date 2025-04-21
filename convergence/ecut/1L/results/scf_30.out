@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.4.1 starts on 16Apr2025 at 15: 7: 5 
+     Program PWSCF v.7.4.1 starts on 21Apr2025 at 23:37: 6 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on     7 processors
 
      MPI processes distributed on     1 nodes
-     15170 MiB available memory on the printing compute node when the environment starts
+     13827 MiB available memory on the printing compute node when the environment starts
 
      Waiting for input...
      Reading input from standard input
@@ -69,7 +69,7 @@
 
 
      PseudoPot. # 1 for C  read from file:
-     /home/rfa/Skripsi/DFT/dft-graphene/pseudo/C.pbe-n-rrkjus_psl.0.1.UPF
+     /run/media/rfa/SATA/Skripsi/DFT/dft-graphene/pseudo/C.pbe-n-rrkjus_psl.0.1.UPF
      MD5 check sum: 96a6a315177d77e6c95bf6fd3870f9e3
      Pseudo is Ultrasoft + core correction, Zval =  4.0
      Generated using &quot;atomic&quot; code by A. Dal Corso  v.6.3MaX
@@ -143,7 +143,7 @@
 
      negative rho (up, down):  1.705E-04 0.000E+00
 
-     total cpu time spent up to now is        0.6 secs
+     total cpu time spent up to now is        0.8 secs
 
      total energy              =     -23.87280655 Ry
      estimated scf accuracy    <       0.12350716 Ry
@@ -154,7 +154,7 @@
 
      negative rho (up, down):  4.382E-04 0.000E+00
 
-     total cpu time spent up to now is        0.7 secs
+     total cpu time spent up to now is        0.9 secs
 
      total energy              =     -23.89283733 Ry
      estimated scf accuracy    <       0.00858162 Ry
@@ -167,7 +167,7 @@
 
      negative rho (up, down):  5.374E-04 0.000E+00
 
-     total cpu time spent up to now is        1.0 secs
+     total cpu time spent up to now is        1.1 secs
 
      total energy              =     -23.89897663 Ry
      estimated scf accuracy    <       0.00071276 Ry
@@ -182,7 +182,7 @@
 
      negative rho (up, down):  6.412E-04 0.000E+00
 
-     total cpu time spent up to now is        1.2 secs
+     total cpu time spent up to now is        1.4 secs
 
      total energy              =     -23.89868837 Ry
      estimated scf accuracy    <       0.00222680 Ry
@@ -194,7 +194,7 @@
 
      negative rho (up, down):  6.553E-04 0.000E+00
 
-     total cpu time spent up to now is        1.3 secs
+     total cpu time spent up to now is        1.5 secs
 
      total energy              =     -23.89893431 Ry
      estimated scf accuracy    <       0.00003641 Ry
@@ -208,7 +208,7 @@
 
      negative rho (up, down):  6.510E-04 0.000E+00
 
-     total cpu time spent up to now is        1.5 secs
+     total cpu time spent up to now is        1.7 secs
 
      total energy              =     -23.89897845 Ry
      estimated scf accuracy    <       0.00000773 Ry
@@ -220,7 +220,7 @@
 
      negative rho (up, down):  6.507E-04 0.000E+00
 
-     total cpu time spent up to now is        1.6 secs
+     total cpu time spent up to now is        1.8 secs
 
      total energy              =     -23.89897886 Ry
      estimated scf accuracy    <       0.00000166 Ry
@@ -231,7 +231,7 @@
 
      negative rho (up, down):  6.505E-04 0.000E+00
 
-     total cpu time spent up to now is        1.7 secs
+     total cpu time spent up to now is        1.9 secs
 
      total energy              =     -23.89897898 Ry
      estimated scf accuracy    <       0.00000051 Ry
@@ -242,7 +242,7 @@
 
      negative rho (up, down):  6.496E-04 0.000E+00
 
-     total cpu time spent up to now is        1.8 secs
+     total cpu time spent up to now is        2.0 secs
 
      total energy              =     -23.89897902 Ry
      estimated scf accuracy    <       0.00000017 Ry
@@ -253,7 +253,7 @@
 
      negative rho (up, down):  6.496E-04 0.000E+00
 
-     total cpu time spent up to now is        1.9 secs
+     total cpu time spent up to now is        2.1 secs
 
      End of self-consistent calculation
 
@@ -352,7 +352,7 @@
 
      Forces acting on atoms (cartesian axes, Ry/au):
 
-     atom    1 type  1   force =     0.00000000    0.00000000    0.00000000
+     atom    1 type  1   force =     0.00000000   -0.00000000    0.00000000
      atom    2 type  1   force =     0.00000000    0.00000000    0.00000000
 
      Total force =     0.000000     Total SCF correction =     0.000000
@@ -363,58 +363,58 @@
 
      negative rho (up, down):  6.496E-04 0.000E+00
           total   stress  (Ry/bohr**3)                   (kbar)     P=      -21.53
-  -0.00014259  -0.00000000  -0.00000000          -20.98       -0.00       -0.00
-  -0.00000000  -0.00014259   0.00000000           -0.00      -20.98        0.00
+  -0.00014259   0.00000000   0.00000000          -20.98        0.00        0.00
+   0.00000000  -0.00014259  -0.00000000            0.00      -20.98       -0.00
   -0.00000000   0.00000000  -0.00015384           -0.00        0.00      -22.63
 
 
-     Writing all to output data dir /home/rfa/Skripsi/DFT/dft-graphene/tmp/gr-1L.save/ :
+     Writing all to output data dir /run/media/rfa/SATA/Skripsi/DFT/dft-graphene/tmp/gr-1L.save/ :
      XML data file, charge density, pseudopotentials, collected wavefunctions
 
-     init_run     :      0.25s CPU      0.41s WALL (       1 calls)
-     electrons    :      2.50s CPU      1.46s WALL (       1 calls)
+     init_run     :      0.27s CPU      0.47s WALL (       1 calls)
+     electrons    :      2.65s CPU      1.56s WALL (       1 calls)
      forces       :      0.01s CPU      0.01s WALL (       1 calls)
      stress       :      0.03s CPU      0.03s WALL (       1 calls)
 
      Called by init_run:
-     wfcinit      :      0.05s CPU      0.03s WALL (       1 calls)
+     wfcinit      :      0.06s CPU      0.03s WALL (       1 calls)
      potinit      :      0.00s CPU      0.01s WALL (       1 calls)
-     hinit0       :      0.19s CPU      0.37s WALL (       1 calls)
+     hinit0       :      0.19s CPU      0.42s WALL (       1 calls)
 
      Called by electrons:
-     c_bands      :      2.28s CPU      1.27s WALL (      10 calls)
-     sum_band     :      0.18s CPU      0.14s WALL (      10 calls)
-     v_of_rho     :      0.02s CPU      0.02s WALL (      11 calls)
+     c_bands      :      2.41s CPU      1.35s WALL (      10 calls)
+     sum_band     :      0.20s CPU      0.15s WALL (      10 calls)
+     v_of_rho     :      0.02s CPU      0.03s WALL (      11 calls)
      newd         :      0.01s CPU      0.02s WALL (      11 calls)
      mix_rho      :      0.01s CPU      0.01s WALL (      10 calls)
 
      Called by c_bands:
-     init_us_2    :      0.04s CPU      0.02s WALL (     437 calls)
-     cegterg      :      2.19s CPU      1.20s WALL (     190 calls)
+     init_us_2    :      0.03s CPU      0.02s WALL (     437 calls)
+     cegterg      :      2.31s CPU      1.28s WALL (     190 calls)
 
      Called by *egterg:
-     cdiaghg      :      0.26s CPU      0.14s WALL (    1440 calls)
-     h_psi        :      1.71s CPU      0.94s WALL (    1459 calls)
+     cdiaghg      :      0.28s CPU      0.15s WALL (    1440 calls)
+     h_psi        :      1.80s CPU      0.99s WALL (    1459 calls)
      s_psi        :      0.02s CPU      0.01s WALL (    1459 calls)
      g_psi        :      0.02s CPU      0.01s WALL (    1250 calls)
 
      Called by h_psi:
      h_psi:calbec :      0.06s CPU      0.03s WALL (    1459 calls)
-     vloc_psi     :      1.61s CPU      0.87s WALL (    1459 calls)
-     add_vuspsi   :      0.02s CPU      0.01s WALL (    1459 calls)
+     vloc_psi     :      1.68s CPU      0.92s WALL (    1459 calls)
+     add_vuspsi   :      0.03s CPU      0.01s WALL (    1459 calls)
 
      General routines
-     calbec       :      0.05s CPU      0.03s WALL (    1972 calls)
-     fft          :      0.19s CPU      0.36s WALL (     146 calls)
+     calbec       :      0.07s CPU      0.04s WALL (    1972 calls)
+     fft          :      0.19s CPU      0.41s WALL (     146 calls)
      ffts         :      0.00s CPU      0.00s WALL (      10 calls)
-     fftw         :      1.55s CPU      0.86s WALL (   13664 calls)
+     fftw         :      1.63s CPU      0.91s WALL (   13664 calls)
 
      Parallel routines
 
-     PWSCF        :      2.86s CPU      2.05s WALL
+     PWSCF        :      3.03s CPU      2.25s WALL
 
 
-   This run was terminated on:  15: 7: 7  16Apr2025            
+   This run was terminated on:  23:37: 9  21Apr2025            
 
 =------------------------------------------------------------------------------=
    JOB DONE.

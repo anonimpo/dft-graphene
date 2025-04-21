@@ -5,18 +5,15 @@
 # Options:
 #   -c, --custom-ecut "VALUES" : Specify custom space-separated ecut values (e.g., "30 40 50")
 #   -p, --plot                 : Plot the results after calculations using plot_ecut.py
-#   -t, --threshold VALUE      : Specify convergence threshold in Ry for check_convergence.sh (default: 0.001)
-# Example:
-#   ./run_ecut_tests.sh -c "50 60 70" -p -t 0.0005 AA 2 4
+# Example: ./run_ecut_tests.sh -c "50 60 70" -p AA 2 4
 
 # --- Option Parsing ---
 custom_ecut=""
 plot_flag=0
-convergence_threshold="" # Optional convergence threshold
 
 # Define options
-SHORT_OPTS="c:pt:" # Added 't:' for threshold
-LONG_OPTS="custom-ecut:,plot,threshold:" # Added 'threshold:'
+SHORT_OPTS="c:p"
+LONG_OPTS="custom-ecut:,plot"
 
 # Parse options
 PARSED_OPTIONS=$(getopt -o $SHORT_OPTS --long $LONG_OPTS -n "$0" -- "$@")
@@ -37,10 +34,6 @@ while true; do
             plot_flag=1
             shift
             ;;
-        -t|--threshold)
-            convergence_threshold="$2"
-            shift 2
-            ;;
         --)
             shift
             break
@@ -56,7 +49,7 @@ done
 if [ $# -lt 3 ]; then
   echo "Error: Not enough positional arguments provided."
   echo "Usage: $0 [OPTIONS] <stacking_type> <num_layers> <num_cpus>"
-  echo "Example: $0 -p -t 0.0005 AA 2 4"
+  echo "Example: $0 -p AA 2 4"
   exit 1
 fi
 
@@ -119,30 +112,6 @@ done
 
 echo "All calculations completed. Results saved in $test_dir/results/ecut_vs_energy.dat"
 
-# --- Convergence Check ---
-check_script="./convergence/ecut/check_convergence.sh" # Path to the convergence check script
-results_file="$test_dir/results/ecut_vs_energy.dat"
-
-if [ -f "$check_script" ]; then
-  if [ -x "$check_script" ]; then
-    echo "--- Running Convergence Check ---"
-    # Pass threshold only if it's set, otherwise check_convergence.sh uses its default
-    if [ -n "$convergence_threshold" ]; then
-        "$check_script" "$results_file" "$convergence_threshold"
-    else
-        "$check_script" "$results_file"
-    fi
-    echo "--- End Convergence Check ---"
-  else
-    echo "Warning: Convergence check script $check_script is not executable. Skipping check."
-    echo "You might need to run: chmod +x $check_script"
-  fi
-else
-  echo "Warning: Convergence check script $check_script not found. Skipping check."
-fi
-# --- End Convergence Check ---
-
-
 # --- Plotting ---
 if [ $plot_flag -eq 1 ]; then
   plot_script="./plot_ecut.py" # Assuming the script is in the current directory
@@ -164,3 +133,4 @@ else
   echo "To plot the results manually, run: python plot_ecut.py $test_dir/results/ecut_vs_energy.dat $test_dir/results/ecut_convergence.png"
 fi
 # --- End Plotting ---
+

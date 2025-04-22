@@ -1,4 +1,4 @@
-# DFT-Graphene
+# !!!README NOT UPDATED!!!
 
 A collection of Quantum ESPRESSO scripts for DFT calculations of graphene structures.
 

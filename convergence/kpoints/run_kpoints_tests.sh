@@ -80,7 +80,7 @@ cpu=$3
 
 # --- Determine Paths ---
 # Absolute project path
-PROJECT_PATH="/home/rfa/SATA/Skripsi/DFT/dft-graphene"     #! will updated by update_paths.sh
+PROJECT_PATH="/run/media/rfa/SATA/Skripsi/DFT/dft-graphene" #! will updated by update_paths.sh
 SCRIPT_PATH="$(PROJECT_PATH)/convergence/kpoints"
 # Directory for this specific k-point test
 kpoint_test_dir=""

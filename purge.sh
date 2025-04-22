@@ -3,7 +3,7 @@
 # purge.sh - Clean all calculation output files after saving important results
 #
 # This script will remove all output files from calculations, but will NOT
-# remove files from the saved_results directory.
+# remove files from the Saved_results directory.
 #
 # Usage: ./purge.sh [--dry-run] [--force]
 # Recommendation: Run ./save_results.sh first to backup important files
@@ -40,9 +40,9 @@ for arg in "$@"; do
   esac
 done
 
-# Check if saved_results directory exists, if not issue a warning
-if [ ! -d "saved_results" ] && [ $dry_run -eq 0 ]; then
-  echo "WARNING: 'saved_results' directory not found!"
+# Check if Saved_results directory exists, if not issue a warning
+if [ ! -d "Saved_results" ] && [ $dry_run -eq 0 ]; then
+  echo "WARNING: Saved_results' directory not found!"
 # echo "It is recommended to run ./save_results.sh before purging to backup important files." 
   echo ""
   
@@ -72,10 +72,10 @@ list_purgeable_files() {
   find structures -name "*.bands.gnu" -type f
   find structures -name "*.bands.rap" -type f
   
-  # Generated plot files (excluding saved_results directory and venv-dft)
-  find . -name "plot-bands.pdf" -type f -not -path "./saved_results/*" -not -path "./venv-dft/*"
-  find . -name "*_convergence.pdf" -type f -not -path "./saved_results/*" -not -path "./venv-dft/*"
-  find . -name "*.png" -type f -not -path "./saved_results/*" -not -path "./venv-dft/*"
+  # Generated plot files (excluding Saved_results directory and venv-dft)
+  find . -name "plot-bands.pdf" -type f -not -path "./Saved_results/*" -not -path "./venv-dft/*"
+  find . -name "*_convergence.pdf" -type f -not -path "./Saved_results/*" -not -path "./venv-dft/*"
+  find . -name "*.png" -type f -not -path "./Saved_results/*" -not -path "./venv-dft/*"
   
   # Temporary files
   find tmp -type f
@@ -109,4 +109,4 @@ done
 find convergence structures tmp -type d -empty -delete 2>/dev/null
 
 echo "Purge completed successfully."
-#echo "Important results have been preserved in the 'saved_results' directory."
+#echo "Important results have been preserved in the 'Saved_results' directory."

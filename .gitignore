@@ -3,12 +3,12 @@ venv-dft/
 
 # Temporary files
 tmp/
-Save_results/
+Saved_results/
 # CLAUDE.md guidance file
 CLAUDE.md
 
 # Generated input files (e.g., Quantum Espresso SCF)
-scf_*
+#scf_*
 
 # Tool config files
 gemini_cli_config.json

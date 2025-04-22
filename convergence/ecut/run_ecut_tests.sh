@@ -34,7 +34,7 @@ EOF
 
 # --- Define Paths ---
 # Absolute project path - this line will be updated by update_paths.sh
-PROJECT_PATH="/home/rfa/SATA/Skripsi/DFT/dft-graphene" #! will updated by update_paths.sh
+PROJECT_PATH="/run/media/rfa/SATA/Skripsi/DFT/dft-graphene" #! will updated by update_paths.sh
 SCRIPT_PATH="${PROJECT_PATH}/convergence/ecut"
 # --- End Define Paths ---
 

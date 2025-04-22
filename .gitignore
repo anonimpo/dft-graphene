@@ -1,14 +1,15 @@
+#upload hasil kalkulsi ke github. 
+
 # Python virtual environment
-venv-dft/
-
-# Temporary files
-tmp/
-Saved_results/
-# CLAUDE.md guidance file
-CLAUDE.md
-
-# Generated input files (e.g., Quantum Espresso SCF)
-#scf_*
-
-# Tool config files
+# venv-dft/
+#
+# # Temporary files
+# tmp/
+# Saved_results/
+#
+# # Generated input files (e.g., Quantum Espresso SCF)
+# #scf_*
+#
+# Tool config files review code
 gemini_cli_config.json
+CLAUDE.md

@@ -1,0 +1,239 @@
+#!/bin/bash
+
+# Script to run k-point mesh convergence tests for multilayer graphene systems
+
+
+# --- Usage Function ---
+usage() {
+  cat << EOF
+Usage: $0 [OPTIONS] <stacking_type> <num_layers> <num_cpus>
+
+Runs relaxation tests for specified graphene systems.
+
+Arguments:
+  <stacking_type>   Stacking type (e.g., AA, AB, 1L for monolayer).
+  <num_layers>      Number of layers (integer, ignored if stacking_type is 1L).
+  <num_cpus>        Number of CPUs to use for mpirun.
+
+Options:
+  -h, --help        : Display this help message and exit.
+
+Example:
+  # Run for 2-layer AA stacking with 4 CPUs
+  $0 AA 2 4
+
+EOF
+  exit 1
+}
+# --- End Usage Function ---
+
+# --- Option Parsing ---
+
+# Define options
+SHORT_OPTS="h" 
+LONG_OPTS="help" 
+
+# Parse options
+PARSED_OPTIONS=$(getopt -o $SHORT_OPTS --long $LONG_OPTS -n "$0" -- "$@")
+if [ $? -ne 0 ]; then
+    usage # Print usage on error
+fi
+eval set -- "$PARSED_OPTIONS"
+
+# Extract options and their arguments into variables
+while true; do
+    case "$1" in
+        -h|--help)
+            usage # Display help message
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Internal error!"
+            exit 1 # Should not happen with getopt
+            ;;
+    esac
+done
+
+# Check if the required positional arguments are provided
+if [ $# -lt 3 ]; then
+  echo "Error: Not enough positional arguments provided." >&2 # Print errors to stderr
+  usage
+fi
+
+# Assign positional arguments
+stacking=$1
+layers=$2
+cpu=$3
+# --- End Option Parsing ---
+
+# --- Determine Paths ---
+# Absolute project path
+PROJECT_PATH="/run/media/rfa/SATA/Skripsi/DFT/dft-graphene" #! will updated by update_paths.sh
+SCRIPT_PATH="$(PROJECT_PATH)/convergence/relax"
+# Directory for this specific relaxation test
+relax_test_dir=""
+# Directory where the corresponding ecut and kpoint results are stored
+ecut_results_dir=""
+kpoint_results_dir=""
+
+if [ "$stacking" = "1L" ]; then
+  # For monolayer, use paths relative to SCRIPT_PATH and PROJECT_PATH
+  relax_test_dir="${SCRIPT_PATH}/1L"
+  ecut_results_dir="${PROJECT_PATH}/convergence/ecut/1L/results"
+  kpoint_results_dir="${PROJECT_PATH}/convergence/kpoints/1L/results"
+else
+  # For multilayer, use stacking/layersL structure relative to SCRIPT_PATH and PROJECT_PATH
+  relax_test_dir="${SCRIPT_PATH}/${stacking}/${layers}L"
+  ecut_results_dir="${PROJECT_PATH}/convergence/ecut/${stacking}/${layers}L/results"
+  kpoint_results_dir="${PROJECT_PATH}/convergence/kpoints/${stacking}/${layers}L/results"
+fi
+
+# Path to the optimal ecut and optimal kpoint files
+optimal_ecut_file="${ecut_results_dir}/optimal_ecut.dat"
+optimal_kpoint_file="${kpoint_results_dir}/optimal_kpoint.dat"
+
+# ---Error Handdling for Reading Optimal Ecut ---
+if [ ! -f "$optimal_ecut_file" ]; then
+  echo "Error: Optimal ecut file not found at $optimal_ecut_file" >&2
+  echo "Please run the ecut convergence test first for $stacking ${layers}L." >&2
+  exit 1
+fi
+
+# ---Error Handdling For Reading Optimal Kpoint---
+if [ ! -f "$optimal_kpoint_file" ]; then
+  echo "Error: Optimal kpoint file not found at $optimal_kpoint_file" >&2
+  echo "Please run the ecutnt convergence test first for $stacking ${layers}L." >&2
+  exit 1
+fi
+
+# Read the optimal ecut and optimal kpoint (assume the same format) value (expects the value on the second line, skipping comments)
+optimal_ecut=$(grep -v '^#' "$optimal_ecut_file" | head -n 1 | awk '{print $1}')
+optimal_kpoint=$(grep -v '^#' "$optimal_kpoint_file" | head -n 1 | awk '{print $1}')
+if [ -z "$optimal_ecut" ]; then
+    echo "Error: Could not read optimal ecut value from $optimal_ecut_file" >&2
+    exit 1
+fi
+
+# Basic validation if it's a number (optional but recommended)
+if ! [[ "$optimal_ecut" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Error: Invalid optimal ecut value read from $optimal_ecut_file: '$optimal_ecut'" >&2
+    exit 1
+fi
+
+if ! [[ "$optimal_kpoint" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Error: Invalid optimal ecut value read from $optimal_kpoint_file: '$optimal_kpoint'" >&2
+    exit 1
+fi
+
+echo "Using optimal ecutwfc = $optimal_ecut Ry (read from $optimal_ecut_file)"
+echo "using optimal K_POINTS (automatic):  (read from $optimal_kpoint_file)"
+echo "$optimal_kpoint"
+echo "------------------------------------"
+
+# Define the directory for this specific test (using the relax_test_dir variable)
+test_dir=$relax_test_dir
+
+# --- End Reading Optimal value from  privious tests---
+
+# Check if the test directory exists
+if [ ! -d "$test_dir" ]; then
+  echo "Error: Test directory $test_dir does not exist"
+  exit 1
+fi
+
+# Define and create the results directory
+results_dir="$test_dir/results"
+mkdir -p "$results_dir"
+
+echo "Running calculation for relaxation automatic possition of $starting $layer graphene" #edit into e.g bilayer graphene with AA stacking
+sed -e "s/ECUT_VALUE/$optimal_ecut/g" \
+    -e "s/"
+
+
+#------------------ up is relax ----------------------------
+
+
+# Define the summary file path
+summary_file="$results_dir/kpoints_vs_energy.dat"
+
+# Clear the summary file before starting the loop
+> "$summary_file"
+
+# Values of kpoint meshes to test
+kpoint_values=(7 8 9 10 11 12 13 14 15)
+shift_values=(0 1)
+
+# Loop through each k-point and shift value combination
+for kpoints in "${kpoint_values[@]}"; do
+  for shift in "${shift_values[@]}"; do
+    echo "Running calculation for k-point mesh = $kpoints x $kpoints x $kpoints with shift = $shift x $shift x $shift (using ecut = $optimal_ecut Ry)"
+
+    # Create a temporary input file with the current kpoints, shift, and optimal ecut values
+    # IMPORTANT: Assumes 'ECUT_VALUE' is the placeholder in your template.in
+    sed -e "s/KVALUE/$kpoints/g" \
+        -e "s/SVALUE/$shift/g" \
+        -e "s/ECUT_VALUE/$optimal_ecut/g" \
+        "$test_dir/template.in" > "$test_dir/scf_k${kpoints}_s${shift}.in"
+
+    # Run the calculation
+    echo "mpirun -np $cpu pw.x < \"$test_dir/scf_k${kpoints}_s${shift}.in\" > \"$results_dir/scf_k${kpoints}_s${shift}.out\""
+    mpirun -np $cpu pw.x < "$test_dir/scf_k${kpoints}_s${shift}.in" > "$results_dir/scf_k${kpoints}_s${shift}.out" 2>&1
+    
+    # Extract total energy - using more flexible pattern
+    total_energy=$(grep "!\s*total energy\s*=" "$results_dir/scf_k${kpoints}_s${shift}.out" | tail -1 | awk '{print $5}')
+    
+    # Save to a summary file
+    echo "$kpoints $shift $total_energy" >> "$summary_file"
+
+    echo "Completed k-point mesh = $kpoints x $kpoints x $kpoints, shift = $shift x $shift x $shift, Total energy = $total_energy Ry"
+    echo "------------------------------------"
+  done
+done
+
+echo "All calculations completed. Results saved in $summary_file"
+
+# --- Plotting and Optimal K-point Determination ---
+# Define the absolute path to the plot script
+plot_script_path="${SCRIPT_PATH}/plot_kpoints.py"
+
+# Check if the plotting script exists
+if [ -f "$plot_script_path" ]; then
+  echo "Plotting results and determining optimal k-point grid..."
+  # Construct the command
+  plot_cmd="python \"$plot_script_path\" \"$stacking\" \"$layers\""
+  if [ $plot_flag -eq 1 ]; then
+    plot_cmd+=" --show"
+  fi
+
+  # Execute the command
+  eval $plot_cmd
+  if [ $? -ne 0 ]; then
+    echo "Error running plotting script." >&2
+  else
+    # Read and print the optimal k-point value if the file exists
+    optimal_kpoints_file="$results_dir/optimal_kpoints.dat"
+    if [ -f "$optimal_kpoints_file" ]; then
+      optimal_k=$(grep -v '^#' "$optimal_kpoints_file" | head -n 1 | awk '{print $1}')
+      if [ -n "$optimal_k" ]; then
+        echo "------------------------------------"
+        echo "Optimal K-point grid size (n x n x 1) determined to be: $optimal_k x $optimal_k x 1"
+        echo "(Based on convergence threshold in $plot_script_path)"
+        echo "Value saved in $optimal_kpoints_file"
+        echo "------------------------------------"
+      else
+        echo "Warning: Could not read optimal k-point value from $optimal_kpoints_file" >&2
+      fi
+    else
+      echo "Warning: Optimal k-point file ($optimal_kpoints_file) not found. Plotting script might have failed or convergence was not met." >&2
+    fi
+  fi
+else
+  echo "Warning: Plotting script $plot_script_path not found. Skipping plotting and optimal k-point determination." >&2
+  echo "To plot manually, run: python \"$plot_script_path\" \"$stacking\" \"$layers\" [--show]" >&2
+fi
+# --- End Plotting ---
+# hourspend= 2
+# feuture to add= custom k and s value 

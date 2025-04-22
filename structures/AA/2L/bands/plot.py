@@ -5,7 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-plt.style.use("../../../../matplotlib/sci.mplstyle")
+plt.style.use("/home/rfa/SATA/Skripsi/DFT/dft-graphene/matplotlib/sci.mplstyle")
 
 
 def plot_band_structure():

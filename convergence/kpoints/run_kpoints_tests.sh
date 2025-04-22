@@ -35,8 +35,8 @@ EOF
 plot_flag=0
 
 # Define options
-SHORT_OPTS="ph" # Added 'h' for help
-LONG_OPTS="plot,help" # Added 'help'
+SHORT_OPTS="ph" 
+LONG_OPTS="plot,help" 
 
 # Parse options
 PARSED_OPTIONS=$(getopt -o $SHORT_OPTS --long $LONG_OPTS -n "$0" -- "$@")
@@ -79,19 +79,22 @@ cpu=$3
 # --- End Option Parsing ---
 
 # --- Determine Paths ---
+# Absolute project path
+PROJECT_PATH="/home/rfa/SATA/Skripsi/DFT/dft-graphene"     #! will updated by update_paths.sh
+SCRIPT_PATH="$(PROJECT_PATH)/convergence/kpoints"
 # Directory for this specific k-point test
 kpoint_test_dir=""
 # Directory where the corresponding ecut results are stored
 ecut_results_dir=""
 
 if [ "$stacking" = "1L" ]; then
-  # For monolayer, use simpler paths
-  kpoint_test_dir="./1L"
-  ecut_results_dir="../ecut/1L/results"
+  # For monolayer, use paths relative to SCRIPT_PATH and PROJECT_PATH
+  kpoint_test_dir="${SCRIPT_PATH}/1L"
+  ecut_results_dir="${PROJECT_PATH}/convergence/ecut/1L/results"
 else
-  # For multilayer, use stacking/layersL structure
-  kpoint_test_dir="./${stacking}/${layers}L"
-  ecut_results_dir="../ecut/${stacking}/${layers}L/results"
+  # For multilayer, use stacking/layersL structure relative to SCRIPT_PATH and PROJECT_PATH
+  kpoint_test_dir="${SCRIPT_PATH}/${stacking}/${layers}L"
+  ecut_results_dir="${PROJECT_PATH}/convergence/ecut/${stacking}/${layers}L/results"
 fi
 
 # Path to the optimal ecut file
@@ -125,24 +128,21 @@ echo "------------------------------------"
 test_dir=$kpoint_test_dir
 # --- End Reading Optimal Ecut ---
 
-
-# Define the directory for this specific test
-if [ "$stacking" = "1L" ]; then
-  # For monolayer, use a simpler path
-  test_dir="./1L"
-else
-  # For multilayer, use stacking/layersL structure
-  test_dir="./${stacking}/${layers}L"
-fi
-
-# Check if the directory exists
+# Check if the test directory exists
 if [ ! -d "$test_dir" ]; then
   echo "Error: Test directory $test_dir does not exist"
   exit 1
 fi
 
-# Create a results directory
-mkdir -p "$test_dir/results"
+# Define and create the results directory
+results_dir="$test_dir/results"
+mkdir -p "$results_dir"
+
+# Define the summary file path
+summary_file="$results_dir/kpoints_vs_energy.dat"
+
+# Clear the summary file before starting the loop
+> "$summary_file"
 
 # Values of kpoint meshes to test
 kpoint_values=(7 8 9 10 11 12 13 14 15)
@@ -161,11 +161,11 @@ for kpoints in "${kpoint_values[@]}"; do
         "$test_dir/template.in" > "$test_dir/scf_k${kpoints}_s${shift}.in"
 
     # Run the calculation
-    echo "mpirun -np $cpu pw.x < $test_dir/scf_k${kpoints}_s${shift}.in > $test_dir/results/scf_k${kpoints}_s${shift}.out"
-    mpirun -np $cpu pw.x < "$test_dir/scf_k${kpoints}_s${shift}.in" > "$test_dir/results/scf_k${kpoints}_s${shift}.out" 2>&1
+    echo "mpirun -np $cpu pw.x < \"$test_dir/scf_k${kpoints}_s${shift}.in\" > \"$results_dir/scf_k${kpoints}_s${shift}.out\""
+    mpirun -np $cpu pw.x < "$test_dir/scf_k${kpoints}_s${shift}.in" > "$results_dir/scf_k${kpoints}_s${shift}.out" 2>&1
     
     # Extract total energy - using more flexible pattern
-    total_energy=$(grep "!\s*total energy\s*=" "$test_dir/results/scf_k${kpoints}_s${shift}.out" | tail -1 | awk '{print $5}')
+    total_energy=$(grep "!\s*total energy\s*=" "$results_dir/scf_k${kpoints}_s${shift}.out" | tail -1 | awk '{print $5}')
     
     # Save to a summary file
     echo "$kpoints $shift $total_energy" >> "$summary_file"
@@ -178,17 +178,14 @@ done
 echo "All calculations completed. Results saved in $summary_file"
 
 # --- Plotting and Optimal K-point Determination ---
-# Determine the relative path to the plot script from the project root
-# Assuming this script is run from the 'kpoints' directory
-plot_script_rel_path="./plot_kpoints.py"
-# Construct absolute path relative to this script's location
-plot_script_abs_path="$(dirname "$0")/$plot_script_rel_path"
+# Define the absolute path to the plot script
+plot_script_path="${SCRIPT_PATH}/plot_kpoints.py"
 
 # Check if the plotting script exists
-if [ -f "$plot_script_abs_path" ]; then
+if [ -f "$plot_script_path" ]; then
   echo "Plotting results and determining optimal k-point grid..."
   # Construct the command
-  plot_cmd="python \"$plot_script_abs_path\" \"$stacking\" \"$layers\""
+  plot_cmd="python \"$plot_script_path\" \"$stacking\" \"$layers\""
   if [ $plot_flag -eq 1 ]; then
     plot_cmd+=" --show"
   fi
@@ -205,7 +202,7 @@ if [ -f "$plot_script_abs_path" ]; then
       if [ -n "$optimal_k" ]; then
         echo "------------------------------------"
         echo "Optimal K-point grid size (n x n x 1) determined to be: $optimal_k x $optimal_k x 1"
-        echo "(Based on convergence threshold in $plot_script_rel_path)"
+        echo "(Based on convergence threshold in $plot_script_path)"
         echo "Value saved in $optimal_kpoints_file"
         echo "------------------------------------"
       else
@@ -216,7 +213,9 @@ if [ -f "$plot_script_abs_path" ]; then
     fi
   fi
 else
-  echo "Warning: Plotting script $plot_script_abs_path not found. Skipping plotting and optimal k-point determination." >&2
-  echo "To plot manually, run: python $plot_script_rel_path $stacking $layers [--show]" >&2
+  echo "Warning: Plotting script $plot_script_path not found. Skipping plotting and optimal k-point determination." >&2
+  echo "To plot manually, run: python \"$plot_script_path\" \"$stacking\" \"$layers\" [--show]" >&2
 fi
 # --- End Plotting ---
+# hourspend= 2
+# feuture to add= custom k and s value 

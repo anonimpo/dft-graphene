@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script to automatically update all paths in input files based on the current directory
-# This allows the code to work on both your local machine and the server
 
 # Get the current absolute path to the project directory
 CURRENT_DIR=$(pwd)
@@ -25,7 +24,6 @@ update_file() {
   echo "  Updating $base_name..."
   
   # Replace the entire line containing pseudo_dir or outdir
-  # This is more robust than trying to match specific path formats
   sed -i "s|^.*pseudo_dir.*$|  pseudo_dir    = '$CURRENT_DIR/pseudo'|" "$file"
   sed -i "s|^.*outdir.*$|  outdir        = '$CURRENT_DIR/tmp'|" "$file"
 }

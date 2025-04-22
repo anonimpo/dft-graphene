@@ -1,5 +1,5 @@
 &bands
-  outdir        = '/run/media/rfa/SATA/Skripsi/DFT/dft-graphene/tmp'
+  outdir        = '/home/rfa/Skripsi/DFT/dft-graphene/tmp'
   prefix  = 'gr-aa-4L'
   filband = 'gr-aa-4L.bands'
 /

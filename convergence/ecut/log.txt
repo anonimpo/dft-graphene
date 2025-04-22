@@ -1,9 +1,0 @@
-log error  Wed Mar 19 05:22:28 AM WIB 2025: could not recognize the pseudo location 
-
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     task #         5
-     from readpp : error #         1
-     file ../../../../pseudo/C.pbe-n-rrkjus_psl.0.1.UPF not found
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-try : move the pseudo file to each dir and change pseudo dir to ./ 
-try : modify the bash script to copy the pseudo file to each dir

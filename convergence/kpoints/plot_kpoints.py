@@ -102,7 +102,7 @@ def plot_kpoints_convergence(stacking, layers, show_plot=False):
         ax2.grid(True)
         ax2.set_yscale("log")
 
-        # Add threshold line for convergence criterion (e.g., 1 meV ~ 0.000073 Ry)
+        # Add threshold line for convergence
         threshold = 0.001  # 1 meV in Ry
         ax2.axhline(
             y=threshold, color="green", linestyle="--", label="1 meV threshold"
@@ -121,7 +121,7 @@ def plot_kpoints_convergence(stacking, layers, show_plot=False):
             ax2.text(
                 0.95,
                 0.95,
-                f"Optimal K-grid ≈ {int(optimal_kpoint_value)}x{int(optimal_kpoint_value)}x1\n(diff ≈ {optimal_diff:.2e} Ry)",
+                f"Optimal K-grid ≈ {int(optimal_kpoint_value)}x{int(optimal_kpoint_value)}x1\n(diff ≈ {optimal_diff:.2e} Ry)",  # ignore LSP
                 transform=ax2.transAxes,
                 fontsize=9,
                 verticalalignment="top",
@@ -138,13 +138,15 @@ def plot_kpoints_convergence(stacking, layers, show_plot=False):
                     )
                     f.write(f"{int(optimal_kpoint_value)}\n")
                 print(
-                    f"Optimal k-point grid size saved to {optimal_kpoints_file}"
+                    f"Optimal k-point grid size saved \
+                    to {optimal_kpoints_file}"
                 )
             except IOError as e:
                 print(f"Warning: Could not write optimal k-point file: {e}")
         else:
             print(
-                "Warning: Convergence threshold not met for any k-point grid size."
+                "Warning: Convergence threshold not met \
+                for any k-point grid size."
             )
 
         plt.tight_layout()
@@ -203,7 +205,8 @@ if __name__ == "__main__":
     elif args.layers <= 0:
         parser.error("Number of layers must be a positive integer.")
     elif args.stacking != "1L" and args.layers < 2:
-        # Allow single layer specification even for AA/AB/ABC for flexibility, but warn
+        # Allow single layer specification even for \
+        # AA/AB/ABC for flexibility, but warn
         print(
             f"Warning: Stacking type {args.stacking} usually implies >= 2 \
             layers, but {args.layers} was specified."
